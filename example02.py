@@ -1,17 +1,46 @@
-class AppleKeyboard:
+from abc import ABC, abstractmethod
+
+class Keyboard(ABC):
+    """키보드 클래스"""
+    @abstractmethod
+    def save_input(self, content: str) -> None:
+        """키보드 인풋 저장 메소드"""
+        pass
+
+    @abstractmethod
+    def send_input(self) -> str:
+        """키보드 인풋 전송 메소드"""
+        pass
+
+class AppleKeyboard(Keyboard):
     """애플 키보드 클래스"""
 
     def __init__(self):
         """키보드 인풋과 터치바 인풋"""
         self.keyboard_input = ""
 
-    def set_keyboard_input(self, input):
+    def save_input(self, input):
         """키보드 인풋 저장 메소드"""
         self.keyboard_input = input
 
-    def send_keyboard_input(self):
+    def send_input(self):
         """키보드 인풋 전송 메소드"""
         return self.keyboard_input
+
+
+class SamsungKeyboard(Keyboard):
+    """삼성 키보드 클래스"""
+    def __init__(self):
+        """키보드 인풋"""
+        self.user_input = ""
+
+    def save_input(self, input):
+        """키보드 인풋 저장 메소드"""
+        self.user_input = input
+
+    def send_input(self):
+        """키보드 인풋 전송 메소드"""
+        return self.user_input
 
 
 class KeyboardManager:
@@ -25,29 +54,19 @@ class KeyboardManager:
 
     def get_keyboard_input(self):
         """유저가 키보드로 입력한 내용을 받아오는 메소드"""
-        if isinstance(self.keyboard, AppleKeyboard):
-            return self.keyboard.send_keyboard_input()
-        elif isinstance(self.keyboard, SamsungKeyboard):
-            return self.keyboard.give_user_input()
+        return self.keyboard.send_input()
 
 
-class SamsungKeyboard:
-    """삼성 키보드 클래스"""
-    def __init__(self):
-        """키보드 인풋"""
-        self.user_input = ""
 
-    def save_user_input(self, input):
-        """키보드 인풋 저장 메소드"""
-        self.user_input = input
-
-    def give_user_input(self):
-        """키보드 인풋 전송 메소드"""
-        return self.user_input
 keyboard_manager = KeyboardManager()
 
-saumsung_keyboard = SamsungKeyboard()
+apple_keyboard = AppleKeyboard()
+samsung_keyboard = SamsungKeyboard()
 
-keyboard_manager.connect_to_keyboard(saumsung_keyboard)
-saumsung_keyboard.save_user_input("안녕하세요 삼성 키보드입니다.")
+keyboard_manager.connect_to_keyboard(apple_keyboard)
+apple_keyboard.save_input("안녕하세요 애플입니다.")
+print(keyboard_manager.get_keyboard_input())
+
+keyboard_manager.connect_to_keyboard(samsung_keyboard)
+samsung_keyboard.save_input("안녕하세요 삼성입니다.")
 print(keyboard_manager.get_keyboard_input())
