@@ -56,3 +56,17 @@ class Square(Rectangle):
         """세로 변수 setter 메소드"""
         self._width = value if value > 0 else 1
         self._height = value if value > 0 else 1
+
+rectangle_1 = Rectangle(4, 6)
+
+rectangle_2 = Square(2)
+
+rectangle_1.width = 3
+rectangle_1.height = 7
+
+print(rectangle_1.area()) # 21
+
+rectangle_2.width = 3
+rectangle_2.height = 7
+
+print(rectangle_2.area()) # 49
