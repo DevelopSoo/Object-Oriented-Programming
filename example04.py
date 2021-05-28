@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
-
-class IMessage(ABC):
+class IText(ABC):
     @property
     @abstractmethod
     def content(self):
@@ -13,13 +12,15 @@ class IMessage(ABC):
         """작성한 메시지를 수정하는 메소드"""
         pass
 
+
+class ISendable(ABC):
     @abstractmethod
     def send(self, destination: str) -> bool:
         """작성한 메시지를 전송하는 메소드"""
         pass
 
 
-class Email(IMessage):
+class Email(IText, ISendable):
     def __init__(self, content, owner_email):
         """이메일은 그 내용과 보낸 사람의 이메일 주소를 인스턴스 변수로 가짐"""
         self._content = content
@@ -40,7 +41,7 @@ class Email(IMessage):
         return True
 
 
-class TextMessage(IMessage):
+class TextMessage(IText, ISendable):
     def __init__(self, content):
         """문자 메시지는 그 내용을 인스턴스 변수로 가짐"""
         self._content = content
@@ -60,7 +61,7 @@ class TextMessage(IMessage):
 
 
 
-class Memo(IMessage):
+class Memo(IText):
     """Memo 클래스는 send 메소드가 필요없음에도 불구하고 IMessage 상속으로 인해 어쩔 수 없이 오버라이딩할 수밖에 없음"""
     def __init__(self, content):
         """메모는 그 내용을 인스턴스 변수로 가짐"""
@@ -75,11 +76,6 @@ class Memo(IMessage):
         """메모 내용 수정 매소드"""
         self._content = new_content
 
-    def send(self, destination):
-        """메모는 전송할 수 없음"""
-        print("메모는 아무데도 보낼 수 없습니다.")
-        return False
-
 
 class TextReader:
     """인스턴스의 텍스트 내용을 읽어주는 클래스"""
@@ -87,7 +83,7 @@ class TextReader:
     def __init__(self):
         self.texts = []
 
-    def add_text(self, text: IMessage):
+    def add_text(self, text: IText):
         """인스턴스 추가 메소드, 파라미터는 IMessage 인터페이스를 상속받을 것"""
         self.texts.append(text)
 
