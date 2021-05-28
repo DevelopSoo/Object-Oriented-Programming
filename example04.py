@@ -59,6 +59,28 @@ class TextMessage(IMessage):
         print("{}로 문자 메시지 전송!\n내용: {}").format(destination, self._content)
 
 
+
+class Memo(IMessage):
+    """Memo 클래스는 send 메소드가 필요없음에도 불구하고 IMessage 상속으로 인해 어쩔 수 없이 오버라이딩할 수밖에 없음"""
+    def __init__(self, content):
+        """메모는 그 내용을 인스턴스 변수로 가짐"""
+        self._content = content
+
+    @property
+    def content(self):
+        """_content 변수 getter 메소드"""
+        return self._content
+
+    def edit_content(self, new_content):
+        """메모 내용 수정 매소드"""
+        self._content = new_content
+
+    def send(self, destination):
+        """메모는 전송할 수 없음"""
+        print("메모는 아무데도 보낼 수 없습니다.")
+        return False
+
+
 class TextReader:
     """인스턴스의 텍스트 내용을 읽어주는 클래스"""
 
@@ -74,3 +96,14 @@ class TextReader:
         for text in self.texts:
             print(text.content)
 
+email = Email("안녕 잘 지내니? 오랜만이야", "young@codeit.kr")
+text_message = TextMessage("오랜만이다. 내일 만날래?")
+memo = Memo("내일 2시까지 숙제 끝낼 것!")
+
+text_reader = TextReader()
+
+text_reader.add_text(email)
+text_reader.add_text(text_message)
+text_reader.add_text(memo)
+
+text_reader.read_all_texts()
